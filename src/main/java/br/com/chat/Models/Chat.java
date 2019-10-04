@@ -38,4 +38,8 @@ public class Chat {
     public List<String> getUsers() {
         return users;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

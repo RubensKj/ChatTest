@@ -23,7 +23,7 @@ public class ChatCrudController {
     private MessageService messageService;
 
     @PostMapping("/chat")
-    public ResponseEntity<@Valid Chat> createNewChat(@Valid @RequestBody Chat chat) {
+    public ResponseEntity<Chat> createNewChat(@RequestBody Chat chat) {
         chat.getMessages().forEach(message -> {
             messageService.save(message);
         });
