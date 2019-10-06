@@ -16,10 +16,6 @@ public class ChatService {
     }
 
     public Chat findById(long id) {
-        if (chatRepository.findById(id).isPresent()) {
-            return chatRepository.findById(id).get();
-        } else {
-            return new Chat();
-        }
+        return chatRepository.findById(id).get();
     }
 }

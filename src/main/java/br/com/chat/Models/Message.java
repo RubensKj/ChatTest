@@ -3,14 +3,14 @@ package br.com.chat.Models;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @DynamicInsert
+@DynamicUpdate
 @Getter
 @Setter
 public class Message {
@@ -21,6 +21,7 @@ public class Message {
 
     private String chatId;
 
+    @Column(name = "message", columnDefinition = "LONGTEXT")
     private String message;
 
     private String username;
