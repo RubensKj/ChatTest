@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Objects;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000"})
 @RestController
 @RequestMapping("/api")
 public class ChatCrudController {
@@ -35,8 +35,21 @@ public class ChatCrudController {
     @GetMapping("/chat/{id}")
     public ResponseEntity<?> findChatById(@PathVariable("id") long id) {
         Chat chat = chatService.findById(id);
+        return ResponseEntity.ok(Objects.requireNonNullElseGet(chat, () -> new Error("Ocorreu algum erro ao buscar o chat.", ChatTestApplication.version)));
+    }
+
+    @PostMapping("/chat/{id}")
+    public ResponseEntity<?> joiningIntoChat(@PathVariable("id") long id, @RequestBody String username) {
+        Chat chat = chatService.findById(id);
         if (chat != null) {
-            return ResponseEntity.ok(chat);
+            if (!chat.getUsers().contains(username)) {
+                chat.getUsers().add(username);
+                chatService.save(chat);
+                return ResponseEntity.ok(chat);
+            } else {
+//                return ResponseEntity.ok(new Error("O usuário já está no chat", ChatTestApplication.version));
+                return ResponseEntity.ok(chat);
+            }
         } else {
             return ResponseEntity.ok(new Error("Ocorreu algum erro ao buscar o chat.", ChatTestApplication.version));
         }

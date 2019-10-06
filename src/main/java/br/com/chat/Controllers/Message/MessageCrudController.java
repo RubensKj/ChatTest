@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.25.17:3000"})
 @RestController
 @RequestMapping("/api")
 public class MessageCrudController {
@@ -25,7 +25,7 @@ public class MessageCrudController {
     @Autowired
     private MessageService messageService;
 
-    @PostMapping("/chat/{id}")
+    @PostMapping("/chat-message/{id}")
     public ResponseEntity<?> createMessage(@PathVariable("id") long id, @RequestBody Message message) {
         Chat chat = chatService.findById(id);
         if (chat != null) {
@@ -37,7 +37,7 @@ public class MessageCrudController {
             pusher.setCluster("us2");
             pusher.setEncrypted(true);
 
-            pusher.trigger("chat-" + chat.getId(), "new-message", Collections.singletonMap("messages", chat.getMessages()));
+            pusher.trigger("chat-" + chat.getId(), "new-message", Collections.singletonMap("chat", chat));
 
             return ResponseEntity.ok(chat);
         } else {
